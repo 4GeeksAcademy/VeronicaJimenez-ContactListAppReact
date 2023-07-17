@@ -8,9 +8,18 @@ import "../styles/index.css";
 //import your own components
 import Layout from './layout.js'
 
+// import for using redux
+import store from './store/store';
+import { Provider } from 'react-redux';
+
 //
 const root = createRoot(document.querySelector("#app"))
 
 //render your react application
-root.render(<Layout/>)
+
+root.render(
+    <Provider store={store}>
+        <Layout/>
+    </Provider>
+    )
 
