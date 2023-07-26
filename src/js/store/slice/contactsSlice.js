@@ -21,31 +21,24 @@ const contactSlice = createSlice({
             state.push(action.payload);
         },
         updateContact:(state, action) => {
-            const editstate = action.payload
-            console.log('editstate', editstate)
-            const  elementToUpdate = state.find((_, index) => index == editstate.id);
+            const editedContact = action.payload
+            console.log('editedContact', editedContact)
+            const  elementToUpdate = state.find((_, index) => index == editedContact.id);
             
             
             if (elementToUpdate){
            
-            //elementToUpdate.editstate = editstate.editItem
-            console.log('elementToUpdate',elementToUpdate)
-            console.log("editstate con editItem", editstate.editItem)
-            }
-
-            //console.log('actionupdate',action.payload)
-            // const newIndex = state.findIndex((_,index) => index === action.payload)
-            // state[newIndex] = {
-            //     ...state[newIndex],
-            //     ...action.payload,
-            //}
+            elementToUpdate.name = editedContact.editItem.name
+            elementToUpdate.email = editedContact.editItem.email
+            elementToUpdate.phone =  editedContact.editItem.phone
+            elementToUpdate.address =  editedContact.editItem.address
+           }          
             
         },
 
         deleteContact:(state, action) => {
            
-            return state.filter((_, index) => index !== action.payload);   
-            
+            return state.filter((_, index) => index !== action.payload);              
 
         },
        

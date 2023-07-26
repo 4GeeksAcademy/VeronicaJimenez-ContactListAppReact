@@ -48,6 +48,7 @@ const EditContact = () => {
 
         const updateItem = () =>{
             dispatch(updateContact({id:id, editItem:editItem}))
+            navigate("/")
         } 
         
 
