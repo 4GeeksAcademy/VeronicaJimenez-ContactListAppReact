@@ -18,8 +18,11 @@ const root = createRoot(document.querySelector("#app"))
 //render your react application
 
 root.render(
-    <Provider store={store}>
-        <Layout/>
-    </Provider>
+    <React.StrictMode>
+        <Provider store={store}>
+            <Layout/>
+        </Provider>
+    </React.StrictMode>
+    
     )
 

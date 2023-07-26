@@ -1,11 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+import { addContact } from "../store/slice/contactsSlice.js";
+import { useDispatch } from "react-redux";
 
 const Contact = () => {
 
-    const [inputItem, setInputItem] = useState(
+    //calling usedispatch
+	const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+	const [inputItem, setInputItem] = useState(
         { 
             name: "",
             email: "",
@@ -15,14 +21,12 @@ const Contact = () => {
         }
     )
         
-        const inputOnList = (e) => {
+        const inputOnChange = (e) => {
             setInputItem({
-               ...inputItem,[e.target.value]  : e.target.value
+               ...inputItem, [e.target.id ] : e.target.value
             });
         };  
 
-        
-        console.log(inputItem)
 
     return(
         <div>
@@ -31,23 +35,23 @@ const Contact = () => {
                 <form>
                     <div className="mb-3 mt-3">
                     <label htmlFor="name">Full Name:</label>
-                    <input type="name" className="form-control" id="name" placeholder="Full Name" name="name" onChange={inputOnList}/>
+                    <input type="name" className="form-control" id="name" placeholder="Full Name" name="name" onChange={inputOnChange}/>
                     </div>
                     <div className="mb-3 mt-3">
                     <label htmlFor="email">Email:</label>
-                    <input type="email" className="form-control" id="email" placeholder="Enter email" name="email" onChange={inputOnList}/>
+                    <input type="email" className="form-control" id="email" placeholder="Enter email" name="email" onChange={inputOnChange}/>
                     </div>
                     <div className="mb-3">
                     <label htmlFor="phone">Phone:</label>
-                    <input type="phone" className="form-control" id="phone" placeholder="Enter phone" name="phone" onChange={inputOnList}/>
+                    <input type="phone" className="form-control" id="phone" placeholder="Enter phone" name="phone" onChange={inputOnChange}/>
                     </div>
                     
                     <div className="mb-3">
                     <label htmlFor="address">Address:</label>
-                    <input type="address" className="form-control" id="address" placeholder="Enter address" name="address" onChange={inputOnList}/>
+                    <input type="address" className="form-control" id="address" placeholder="Enter address" name="address" onChange={inputOnChange}/>
                     </div>
                     <div className="d-grid gap-3 mt-4">
-                    <button type="submit" className="btn btn-primary btn-block">Save</button>
+                    <button type="submit" className="btn btn-primary btn-block" onClick={() => dispatch(addContact(inputItem),navigate("/"))}>Save</button>
                     </div>    
                 </form>
             </div>

@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./views/home";
 import Contact from "./views/register.jsx";
-
+import EditContact from "./component/editContact.jsx";
 
 
 //create your first component
@@ -16,14 +16,18 @@ const routes = createBrowserRouter([
 	{
 		path: "/contact",
 		element: <Contact/>
+	},
+	{
+		path: "/edit/:theid",
+		element: <EditContact/>
 	}
 ])
 
 const Layout = () => {
 	return (
-		<React.StrictMode>
-			<RouterProvider router={routes}/>
-		</React.StrictMode>
+		
+		<RouterProvider router={routes}/>
+		
 	);
 };
 
