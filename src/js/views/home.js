@@ -1,22 +1,48 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { deleteContact} from "../store/slice/contactsSlice.js";
+import { eraseContact} from "../store/slice/contactsSlice.js";
+import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
+import { selectContacts, getContactsError, getContactsStatus, fetchContacts } from "../store/slice/contactsSlice.js";
+
 
 
 const Home = () => {
 	// Calling useSelector
-	const users = useSelector((state)=>{
-		return state.contact;
-	});
+	const users = useSelector(selectContacts);
+	const contactsStatus = useSelector(getContactsStatus)
+	const errors = useSelector(getContactsError)
+	
+	//useeffect
+	useEffect(()=>{
+		
+        dispatch(fetchContacts())
+        
+    }, [])
+	if (users.lenght == 0 || users.lenght == 1|| users.lenght == 2) {
+		return <p>"Loading..."</p>;
+    } 
+	// Using the extrareducers
+	
+	if (contactsStatus === 'loading') {
+        return <p>"Loading..."</p>;
+    } 
+	 
+	if (contactsStatus === 'failed') {
+        return <p>{errors}</p>;
+    }
+
+	
 	//calling usedispatch
 	const dispatch = useDispatch()
 
-	const removeItem = (index) => {
-		dispatch(deleteContact(index))
+	const removeItem = (id) => {
+		dispatch(eraseContact(id))
+		
 	}
+	
 
 	console.log('users',users)
 	
@@ -33,11 +59,11 @@ const Home = () => {
 
 				<div className="row border" key={i}>
 				 <div className="col text-center m-1">
-					 <img className="img-fluid"  src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"/>
+					 <img className="img-fluid"  src="https://thenounproject.com/api/private/icons/4216248/edit/?backgroundShape=SQUARE&backgroundShapeColor=%23000000&backgroundShapeOpacity=0&exportSize=752&flipX=false&flipY=false&foregroundColor=%23000000&foregroundOpacity=1&imageFormat=png&rotation=0"/>
 				 </div>
 				 <div className="col-6 mt-3">
 					 
-					 <h3 >{data.name}</h3>
+					 <h3 >{data.full_name}</h3>
 					 <p><i className="fa-solid fa-location-dot"></i> {data.address} </p>                   
 					 <p><i className="fa-solid fa-phone"></i> {data.phone} </p>
 					 <p><i className="fa-solid fa-envelope"></i> {data.email} </p>                
@@ -45,13 +71,13 @@ const Home = () => {
 				 <div className="col-3 mt-3" >
 					 <div className="d-flex justify-content-around mb-3">
 						 <div className="p-2 ">
-							<Link to={`/edit/${i}`}>
+							<Link to={`/edit/${data.id}`}>
 								<button ><i className="fa-solid fa-pen"></i></button>
 							</Link>
 							
 						 </div>
 						 <div className="p-2 ">
-							 <button onClick={() => removeItem(i)}><i className="fa-solid fa-trash"></i></button>
+							 <button onClick={() => removeItem(data.id)}><i className="fa-solid fa-trash"></i></button>
 						 </div>
 					 </div>
 				 </div>

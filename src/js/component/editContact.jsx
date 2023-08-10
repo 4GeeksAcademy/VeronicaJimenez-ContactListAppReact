@@ -2,36 +2,45 @@ import React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
-import { updateContact  } from "../store/slice/contactsSlice.js";
+import { updateContact } from "../store/slice/contactsSlice.js";
 import { useSelector, useDispatch } from "react-redux";
-
+import { selectContacts} from "../store/slice/contactsSlice.js";
 
 const EditContact = () => {
-   // Calling useSelector
-	const users = useSelector((state)=>{
-		return state.contact;
-	});
     
+
+
     //calling usedispatch and navigate
 	const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    //getting the element by id
+    
+   //getting the element by id
+    
     const params = useParams()
-    const id = params["theid"]
-    const existingContact = users.filter( (_, index) => index == id )
-    const existingContactObj = existingContact[0]
+    const contactId = params["theid"]
+    console.log("contactId", contactId)
+   // Calling useSelector
+   const users = useSelector(selectContacts);
+   const existingContact = users.filter( (data) => data.id == contactId )
+   const existingContactObj = existingContact[0]
 
-    console.log('users', users)
-    console.log('existeingcontact', existingContact)
-    //
+    if (!existingContactObj) {
+        return (
+            <section>
+                <h2>Post not found!</h2>
+            </section>
+        )
+    }
 
 	const [editItem, setEditItem] = useState(
         { 
-            name: existingContactObj.name,
+            full_name: existingContactObj.full_name,
             email: existingContactObj.email,
             phone: existingContactObj.phone,
-            address: existingContactObj.address
+            address: existingContactObj.address,
+            id: existingContactObj.id,
+            agenda_slug: "agenda_vjim"
 
         }
         
@@ -46,8 +55,9 @@ const EditContact = () => {
          console.log("edit", editItem)
             
 
-        const updateItem = () =>{
-            dispatch(updateContact({id:id, editItem:editItem}))
+        const updateItem = (e) =>{
+            e.preventDefault();
+            dispatch(updateContact(editItem))
             navigate("/")
         } 
         
@@ -59,7 +69,7 @@ const EditContact = () => {
                 <form>
                     <div className="mb-3 mt-3">
                     <label htmlFor="name">Full Name:</label>
-                    <input type="name" className="form-control" id="name" name="name" value={editItem.name} onChange={inputOnChange}/>
+                    <input type="name" className="form-control" id="full_name" name="name" value={editItem.full_name} onChange={inputOnChange}/>
                     </div>
                     <div className="mb-3 mt-3">
                     <label htmlFor="email">Email:</label>
@@ -75,7 +85,7 @@ const EditContact = () => {
                     <input type="address" className="form-control" id="address" value={editItem.address} name="address" onChange={inputOnChange}/>
                     </div>
                     <div className="d-grid gap-3 mt-4">
-                    <button type="submit" className="btn btn-primary btn-block" onClick={() => updateItem()}>Edit</button>
+                    <button type="submit" className="btn btn-primary btn-block" onClick={updateItem}>Edit</button>
                     </div>    
                 </form>
             </div>

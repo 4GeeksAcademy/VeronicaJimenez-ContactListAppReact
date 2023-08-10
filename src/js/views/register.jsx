@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { addContact } from "../store/slice/contactsSlice.js";
+import { addNewContact } from "../store/slice/contactsSlice.js";
 import { useDispatch } from "react-redux";
 
 const Contact = () => {
@@ -13,10 +13,11 @@ const Contact = () => {
 
 	const [inputItem, setInputItem] = useState(
         { 
-            name: "",
+            full_name: "",
             email: "",
             phone: "",
-            address: ""
+            address: "",
+            agenda_slug: "agenda_vjim",
 
         }
     )
@@ -27,6 +28,14 @@ const Contact = () => {
             });
         };  
 
+        const handleOnClick=(e)=>{
+            e.preventDefault();
+            dispatch(addNewContact(inputItem))
+                          
+            navigate("/");
+            
+            
+        }
 
     return(
         <div>
@@ -35,7 +44,7 @@ const Contact = () => {
                 <form>
                     <div className="mb-3 mt-3">
                     <label htmlFor="name">Full Name:</label>
-                    <input type="name" className="form-control" id="name" placeholder="Full Name" name="name" onChange={inputOnChange}/>
+                    <input type="name" className="form-control" id="full_name" placeholder="Full Name" name="name" onChange={inputOnChange}/>
                     </div>
                     <div className="mb-3 mt-3">
                     <label htmlFor="email">Email:</label>
@@ -51,7 +60,7 @@ const Contact = () => {
                     <input type="address" className="form-control" id="address" placeholder="Enter address" name="address" onChange={inputOnChange}/>
                     </div>
                     <div className="d-grid gap-3 mt-4">
-                    <button type="submit" className="btn btn-primary btn-block" onClick={() => dispatch(addContact(inputItem),navigate("/"))}>Save</button>
+                    <button type="submit" className="btn btn-primary btn-block" onClick={handleOnClick}>Save</button>
                     </div>    
                 </form>
             </div>
